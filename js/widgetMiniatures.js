@@ -6,6 +6,9 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 const pictureContainer = document.querySelector('.pictures'); //нужно будет вставить последним элементом внутри этой секции
 const miniaturesList = generateObjects(); // массив объектов из 25 публикаций случайных
 
+/**
+ * Цикл в котором каждый объект массива со случайными данными подставляется в шаблон. Результат добавляется в секцию с миниатюрами.
+ */
 miniaturesList.forEach((post) => { //post - текущий объект массива
   const pictureElement = pictureTemplate.cloneNode(true);
   // подставим данные в шаблон
