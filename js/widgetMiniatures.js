@@ -9,8 +9,10 @@ const miniaturesList = generateObjects(); // массив объектов из 
 /**
  * Цикл в котором каждый объект массива со случайными данными подставляется в шаблон. Результат добавляется в секцию с миниатюрами.
  */
-miniaturesList.forEach((post) => { //post - текущий объект массива
+miniaturesList.forEach((post, index) => { //post - текущий объект массива
   const pictureElement = pictureTemplate.cloneNode(true);
+
+  pictureElement.dataset.index = index;
   // подставим данные в шаблон
   const img = pictureElement.querySelector('.picture__img');
   const likes = pictureElement.querySelector('.picture__likes');
@@ -24,3 +26,5 @@ miniaturesList.forEach((post) => { //post - текущий объект масс
   miniaturesContainer.appendChild(pictureElement); // добавили сначала в Fragment
 });
 pictureContainer.appendChild(miniaturesContainer);
+
+export { miniaturesList };

@@ -20,4 +20,23 @@ const getRandomPositivInteger = (a, b) => {
 const getRandomArrayElement = (elements) =>
   elements[getRandomPositivInteger(0, elements.length - 1)];
 
-export {getRandomPositivInteger, getRandomArrayElement};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+const isEnterKey = (evt) => evt.key === 'Enter';
+
+
+const increaseByOne = function (min, max) {
+  let counter = min;
+
+  return function () {
+    if (max === undefined) {
+      counter += 1;
+    } else if (counter <= max) {
+      counter += 1;
+    }
+
+    return counter;
+  };
+};
+
+export {getRandomPositivInteger, getRandomArrayElement, isEscapeKey, isEnterKey, increaseByOne};

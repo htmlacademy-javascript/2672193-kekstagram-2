@@ -1,5 +1,6 @@
 import { getRandomPositivInteger, getRandomArrayElement } from './utils.js';
 import { MESSAGE, NAME, DESCRIPTION } from './data.js';
+import { increaseByOne } from './utils.js';
 
 /**
  * Эта функция увеличивает значение переменной counter на 1.
@@ -7,20 +8,6 @@ import { MESSAGE, NAME, DESCRIPTION } from './data.js';
  * @param {number} max Не ограничено максимальным значением.
  * @returns {() => number} Функция-счетчик.
  */
-
-const increaseByOne = function (min, max) {
-  let counter = min;
-
-  return function () {
-    if (max === undefined) {
-      counter += 1;
-    } else if (counter <= max) {
-      counter += 1;
-    }
-
-    return counter;
-  };
-};
 
 /**
  * Эта функция выберет количество сообщений и выберет их содержание из массива MESSAGE.
