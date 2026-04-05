@@ -1,6 +1,7 @@
 import { miniaturesList } from './widgetMiniatures.js';
 import { isEscapeKey } from './utils.js';
 
+const COMMENTS_STEP = 5;
 const bigPicture = document.querySelector('.big-picture');
 const pictureContainer = document.querySelector('.pictures');
 const closeButton = document.querySelector('.big-picture__cancel');
@@ -13,6 +14,9 @@ const commentsList = bigPicture.querySelector('.social__comments');
 const socialCaption = bigPicture.querySelector('.social__caption');
 const commentsCountBlock = bigPicture.querySelector('.social__comment-count');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
+
+let allCommentsCurrentPhoto = []; // Все комментарии для текущего фото.
+let renderedCommentsCount = 0; // Сколько комментариев уже открыто.
 
 /**
  * Функция которая создает один комментарий
@@ -50,21 +54,50 @@ const createComment = ({ avatar, name, message }) => {
 };
 
 /**
- * Заполняем список комментариями
- * @param {*} Комментарии ()
+ * Переопределяем значения, которые нужно отрисовать на странице. Сколько отображено, сколько всего.
  */
+const updateCommentsCounter = () => {
+  commentsShownCount.textContent = renderedCommentsCount;
+  commentsTotalCount.textContent = allCommentsCurrentPhoto.length;
+};
 
-const renderComments = (comments) => {
-  commentsList.innerHTML = ''; // Очистили список перед тем как заполнять
+/**
+ * Показывает или скрывает кнопку загрузки комментариев
+ * в зависимости от количества уже отображённых комментариев.
+ */
+const loadCommentsButton = () => {
+  if (renderedCommentsCount >= allCommentsCurrentPhoto.length) {
+    commentsLoader.classList.add('hidden');
+    return;
+  }
+
+  commentsLoader.classList.remove('hidden');
+};
+
+/**
+ * Отрисовка списка комментариев.
+ */
+const renderComments = () => {
+  /*
+  commentsList.innerHTML = '';  Очистили список перед тем как заполнять, теперь так не делаем, потому что при отрисовки новой порции комментариев
+  стирать предыдущие не надо. Очищать список будем когда новая картинка открывается.
+  */
+  const nextComments = allCommentsCurrentPhoto.slice( // Определили какой участок массива буем отрисовывать к предыдущим комментариям.
+    renderedCommentsCount,
+    renderedCommentsCount + COMMENTS_STEP
+  );
 
   const commentsFragment = document.createDocumentFragment(); // Создали фрагмент куда сложим прежде чем отрисовывать.
 
-  // Добавим в фрагмент все комментарии из массива комментариев.
-  comments.forEach((comment) => {
+  // Добавим в фрагмент все комментарии из участка массива который будем отрисовывать следующими.
+  nextComments.forEach((comment) => {
     commentsFragment.append(createComment(comment));
   });
 
   commentsList.append(commentsFragment); // Отрисуем.
+  renderedCommentsCount += nextComments.length; // Выведет корректное количество даже если остаток массива не был кратным 5.
+  updateCommentsCounter(); // Отрисовали новые значения.
+  loadCommentsButton(); //Убираем кнопку показать еще, елси количество комментариев закончилось.
 };
 
 /**
@@ -99,14 +132,15 @@ const openBigPicture = (post) => {
   bigPictureImg.src = post.url;
   bigPictureImg.alt = post.description;
   likesCount.textContent = post.likes;
-  commentsShownCount.textContent = post.comments.length;
-  commentsTotalCount.textContent = post.comments.length;
   socialCaption.textContent = post.description;
 
-  renderComments(post.comments);
+  allCommentsCurrentPhoto = post.comments;
+  renderedCommentsCount = 0;
+  commentsList.innerHTML = '';
 
-  commentsCountBlock.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
+  commentsCountBlock.classList.remove('hidden');
+
+  renderComments();
 
   document.addEventListener('keydown', onDocumentKeydown);
 };
@@ -130,5 +164,6 @@ pictureContainer.addEventListener('click', (evt) => {
 });
 
 closeButton.addEventListener('click', closeBigPicture);
+commentsLoader.addEventListener('click', renderComments);
 
 export { openBigPicture };
