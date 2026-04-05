@@ -51,8 +51,10 @@ const choseMessage = function (max) {
     while (messages.some((mes) => mes === message)) {
       message = getRandomArrayElement(MESSAGE);
     }
+
     messages.push(message);
   }
+
   return messages.join(' ');
 };
 

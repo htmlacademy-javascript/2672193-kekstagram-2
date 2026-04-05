@@ -29,14 +29,12 @@ const increaseByOne = function (min, max) {
   let counter = min;
 
   return function () {
-    if (max === undefined) {
-      counter += 1;
-    } else if (counter <= max) {
-      counter += 1;
+    if (max !== undefined && counter >= max) {
+      return counter;
     }
-
+    counter += 1;
     return counter;
   };
 };
 
-export {getRandomPositivInteger, getRandomArrayElement, isEscapeKey, isEnterKey, increaseByOne};
+export { getRandomPositivInteger, getRandomArrayElement, isEscapeKey, isEnterKey, increaseByOne };
