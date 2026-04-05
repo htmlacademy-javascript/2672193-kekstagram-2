@@ -6,8 +6,13 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 const pictureContainer = document.querySelector('.pictures'); //нужно будет вставить последним элементом внутри этой секции
 const miniaturesList = generateObjects(); // массив объектов из 25 публикаций случайных
 
-miniaturesList.forEach((post) => { //post - текущий объект массива
+/**
+ * Цикл в котором каждый объект массива со случайными данными подставляется в шаблон. Результат добавляется в секцию с миниатюрами.
+ */
+miniaturesList.forEach((post, index) => { //post - текущий объект массива
   const pictureElement = pictureTemplate.cloneNode(true);
+
+  pictureElement.dataset.index = index;
   // подставим данные в шаблон
   const img = pictureElement.querySelector('.picture__img');
   const likes = pictureElement.querySelector('.picture__likes');
@@ -21,3 +26,5 @@ miniaturesList.forEach((post) => { //post - текущий объект масс
   miniaturesContainer.appendChild(pictureElement); // добавили сначала в Fragment
 });
 pictureContainer.appendChild(miniaturesContainer);
+
+export { miniaturesList };
