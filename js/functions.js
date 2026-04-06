@@ -1,63 +1,35 @@
-function checkLengthString(string, maxLength) {
-  return string.length <= maxLength; // .length считает количество символов
-}
-checkLengthString('проверяемая строка', 20); // true
-checkLengthString('проверяемая строка', 18); // true
-checkLengthString('проверяемая строка', 10); // false
-checkLengthString('Привет, мир!', 15); // true
-checkLengthString('Февраль', 5); // false
-/*
-console.log(checkLengthString('проверяемая строка', 20)); // true
-console.log(checkLengthString('проверяемая строка', 18)); // true
-console.log(checkLengthString('проверяемая строка', 10)); // false
-console.log(checkLengthString('Привет, мир!', 15)); // true
-console.log(checkLengthString('Февраль', 5)); // false
+/*Добавить в проект валидацию, проверки введённых данных, чтобы подсказать пользователю, какие данные мы от него ждём,
+а себе и бэкендеру упростить работу с этими данными.
+
+Заведите модуль, который будет отвечать за работу с формой.
+
+Пропишите тегу <form> правильные значения атрибутов method и enctype и адрес action для отправки формы на сервер.
+
+
+Обратите внимание. В разделе про работу с сетью мы доработаем механизм отправки данных, а пока достаточно правильных атрибутов у тега <form>.
+
+Если форма заполнена верно, то после отправки покажется страница сервера (по адресу из атрибута action тега form) с успешно отправленными данными.
+Если же форма пропустила какие-то некорректные значения, то будет показана страница с допущенными ошибками.
+В идеале у пользователя не должно быть сценария, при котором он может отправить некорректную форму.
+
+Изучите, что значит загрузка изображения, и как, когда и каким образом показывается форма редактирования изображения.
+Напишите код и добавьте необходимые обработчики для реализации этого пункта техзадания.
+В работе вы можете опираться на код показа окна с полноразмерной фотографией, который вы, возможно, уже написали в предыдущей домашней работе.
+
+Важно. Подстановка выбранного изображения в форму — это отдельная домашняя работа. В данном задании этот пункт реализовывать не нужно.
+
+После реализуйте закрытие формы.
+
+Обратите внимание, что при закрытии формы дополнительно необходимо сбрасывать значение поля выбора файла .img-upload__input.
+В принципе, всё будет работать, если при повторной попытке загрузить в поле другую фотографию.
+Но! Событие change не сработает, если пользователь попробует загрузить ту же фотографию, а значит окно с формой не отобразится,
+что будет нарушением техзадания. Значение других полей формы также нужно сбрасывать.
+
+Напишите код для валидации формы добавления изображения, используя библиотеку Pristine (скрипт находится в директории /vendor/pristine).
+Список полей для валидации:
+
+Хэштеги
+Комментарий
+Реализуйте логику проверки так, чтобы, как минимум, она срабатывала при попытке отправить форму и не давала этого сделать,
+если форма заполнена не по правилам. При желании, реализуйте проверки сразу при вводе значения в поле.
 */
-
-function checkPalindrome(string) {
-  const convertedString = string.replaceAll(' ', '').toLowerCase(); // .replaceAll меняет пробелы на ничего
-  let sampleString = '';
-  for (let i = convertedString.length - 1; i >= 0; i--) {
-    sampleString += convertedString[i]; // [] обращение к конкретному символу строки по индексу (положение в строке)
-  }
-  return convertedString === sampleString;
-}
-
-checkPalindrome('топот'); // true
-checkPalindrome('ДовОд'); // true
-checkPalindrome('Кекс'); // false
-checkPalindrome('Лёша на полке клопа нашёл '); // true
-checkPalindrome('Привет, мир!'); // false
-checkPalindrome('Февраль'); // false
-/*
-console.log(checkPalindrome('топот')); // true
-console.log(checkPalindrome('ДовОд')); // true
-console.log(checkPalindrome('Кекс')); // false
-console.log(checkPalindrome('Лёша на полке клопа нашёл ')); // true
-console.log(checkPalindrome('Привет, мир!')); // false
-console.log(checkPalindrome('Февраль')); // false
-*/
-
-//задание 5.16.
-//функция переводит строчную запись времени часы минуты в число минут
-function transformToMinutes(time) {
-  const [hours, minutes] = time.split(':').map(Number);
-  return hours * 60 + minutes;
-}
-
-//функция проверят не выходит ли начало и конец встречи за рамки начала и конца рабочего для
-function isMeetingOnWorkDay(timeStartWorkDay, timeEndWorkDay, timeStartMeeting, durationMeeting) {
-  const startWork = transformToMinutes(timeStartWorkDay); //480
-  const endWork = transformToMinutes(timeEndWorkDay); //1050
-  const startMeeting = transformToMinutes(timeStartMeeting); //840
-
-  const endMeeting = startMeeting + durationMeeting; //930
-
-  return startMeeting >= startWork && endMeeting <= endWork;
-}//возвращает true, если встреча не выходит за рамки рабочего дня, и false, если выходит.
-
-isMeetingOnWorkDay('08:00', '17:30', '14:00', 90); // true
-isMeetingOnWorkDay('8:0', '10:0', '8:0', 120); // true
-isMeetingOnWorkDay('08:00', '14:30', '14:00', 90); // false
-isMeetingOnWorkDay('14:00', '17:30', '08:0', 90); // false
-isMeetingOnWorkDay('8:00', '17:30', '08:00', 900); // false
