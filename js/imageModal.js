@@ -20,7 +20,7 @@ let renderedCommentsCount = 0; // Сколько комментариев уже
 
 /**
  * Функция которая создает один комментарий
- * Если не использовать деструктуризацию, то можно сначала обртаиться к объекту и затем уже отдельно доставать из него значения по ключам.
+ * Если не использовать деструктуризацию, то можно сначала обратиться к объекту и затем уже отдельно доставать из него значения по ключам.
  * const createComment = (comment) => {
    const avatar = comment.avatar;
    const name = comment.name;
@@ -66,12 +66,10 @@ const updateCommentsCounter = () => {
  * в зависимости от количества уже отображённых комментариев.
  */
 const loadCommentsButton = () => {
-  if (renderedCommentsCount >= allCommentsCurrentPhoto.length) {
-    commentsLoader.classList.add('hidden');
-    return;
-  }
-
-  commentsLoader.classList.remove('hidden');
+  commentsLoader.classList.toggle(
+    'hidden',
+    renderedCommentsCount >= allCommentsCurrentPhoto.length
+  );
 };
 
 /**
@@ -79,10 +77,10 @@ const loadCommentsButton = () => {
  */
 const renderComments = () => {
   /*
-  commentsList.innerHTML = '';  Очистили список перед тем как заполнять, теперь так не делаем, потому что при отрисовки новой порции комментариев
+  commentsList.innerHTML = '';  Очистили список перед тем как заполнять, теперь так не делаем, потому что при отрисовке новой порции комментариев
   стирать предыдущие не надо. Очищать список будем когда новая картинка открывается.
   */
-  const nextComments = allCommentsCurrentPhoto.slice( // Определили какой участок массива буем отрисовывать к предыдущим комментариям.
+  const nextComments = allCommentsCurrentPhoto.slice( // Определили какой участок массива будем отрисовывать к предыдущим комментариям.
     renderedCommentsCount,
     renderedCommentsCount + COMMENTS_STEP
   );
@@ -97,7 +95,7 @@ const renderComments = () => {
   commentsList.append(commentsFragment); // Отрисуем.
   renderedCommentsCount += nextComments.length; // Выведет корректное количество даже если остаток массива не был кратным 5.
   updateCommentsCounter(); // Отрисовали новые значения.
-  loadCommentsButton(); //Убираем кнопку показать еще, елси количество комментариев закончилось.
+  loadCommentsButton(); //Убираем кнопку показать еще, если количество комментариев закончилось.
 };
 
 /**
@@ -111,7 +109,7 @@ const closeBigPicture = () => {
 };
 
 /**
- * Событие нажатие клавиши esc
+ * Обработчик нажатия клавиши Esc
  * @param {*} evt
  */
 function onDocumentKeydown(evt) {
@@ -125,16 +123,16 @@ function onDocumentKeydown(evt) {
  * Берет данные из миниатюры и подставляет их в большую картинку.
  * @param {*} post
  */
-const openBigPicture = (post) => {
+const openBigPicture = ({ url, description, likes, comments }) => {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
-  bigPictureImg.src = post.url;
-  bigPictureImg.alt = post.description;
-  likesCount.textContent = post.likes;
-  socialCaption.textContent = post.description;
+  bigPictureImg.src = url;
+  bigPictureImg.alt = description;
+  likesCount.textContent = likes;
+  socialCaption.textContent = description;
 
-  allCommentsCurrentPhoto = post.comments;
+  allCommentsCurrentPhoto = comments;
   renderedCommentsCount = 0;
   commentsList.innerHTML = '';
 

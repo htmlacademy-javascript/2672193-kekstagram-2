@@ -27,7 +27,8 @@ const choseMessage = function () {
     return messages[0];
   } else {
     while (messages[0] === messages[1]) {
-      messages[1] = getRandomArrayElement(MESSAGE); // проверка на совпадение 2х случайных комментариев, елси совпали выбери новый
+      messages[1] = getRandomArrayElement(MESSAGE); // проверка на совпадение 2х случайных комментариев, есл
+      // и совпали выбери новый
     }
 
     return `${messages[0]} ${messages[1]}`;
