@@ -1,4 +1,3 @@
-import { miniaturesList } from './widgetMiniatures.js';
 import { isEscapeKey } from './utils.js';
 
 const COMMENTS_STEP = 5;
@@ -17,7 +16,10 @@ const commentsLoader = bigPicture.querySelector('.comments-loader');
 
 let allCommentsCurrentPhoto = []; // Все комментарии для текущего фото.
 let renderedCommentsCount = 0; // Сколько комментариев уже открыто.
-
+let pictures = [];
+const setPictures = (data) => {
+  pictures = data;
+};
 /**
  * Функция которая создает один комментарий
  * Если не использовать деструктуризацию, то можно сначала обратиться к объекту и затем уже отдельно доставать из него значения по ключам.
@@ -157,11 +159,11 @@ pictureContainer.addEventListener('click', (evt) => {
 
   evt.preventDefault(); // Потому что ссылка
 
-  const post = miniaturesList[picture.dataset.index];
+  const post = pictures[picture.dataset.index];
   openBigPicture(post);
 });
 
 closeButton.addEventListener('click', closeBigPicture);
 commentsLoader.addEventListener('click', renderComments);
 
-export { openBigPicture };
+export { openBigPicture, setPictures };
