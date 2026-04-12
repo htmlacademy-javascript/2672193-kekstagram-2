@@ -5,13 +5,28 @@ import { renderMiniatures } from './widgetMiniatures.js';
 import { getPictures } from './api.js';
 import { setPictures } from './imageModal.js';
 
+// Обработка данных с сервера
+
 getPictures()
   .then((pictures) => {
     setPictures(pictures);
     renderMiniatures(pictures);
   })
-  .catch((err) => {
-    const errorElement = document.createElement('p');
-    errorElement.textContent = err.message;
-    document.body.appendChild(errorElement);
+  .catch(() => {
+    showDataErrorMessage();
   });
+
+function showDataErrorMessage() {
+  const dataErrorTemplate = document.querySelector('#data-error').content;
+  const dataErrorMessage = dataErrorTemplate.cloneNode(true);
+
+  document.body.append(dataErrorMessage);
+
+  setTimeout(() => {
+    const dataErrorElement = document.querySelector('.data-error');
+
+    if (dataErrorElement) {
+      dataErrorElement.remove();
+    }
+  }, 5000);
+}

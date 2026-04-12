@@ -1,4 +1,5 @@
 import { isEscapeKey } from './utils.js';
+import { sendData } from './api.js';
 
 const overlay = document.querySelector('.img-upload__overlay'); // Форма редактирования изображения
 const inputImg = document.querySelector('.img-upload__input'); // Форма загрузки изображения
@@ -8,8 +9,9 @@ const form = document.querySelector('.img-upload__form');
 
 const hashtagInput = form.querySelector('.text__hashtags');
 const commentInput = form.querySelector('.text__description');
-
-
+const errorTemplate = document.querySelector('#error').content;
+const successTemplate = document.querySelector('#success').content;
+const submitButton = form.querySelector('.img-upload__submit');
 /**
  * Открывет форму редактирования и модельное окно при загрузке файла.
  */
@@ -28,11 +30,11 @@ buttonCancel.addEventListener('click', closeModal);
 /**
  * Обработчик события esc. Запись такая потому что нам ее нужно вызывать выше.
  */
-function onEsc (evt) {
+function onEsc(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     if (document.activeElement !== hashtagInput &&
-        document.activeElement !== commentInput) {
+      document.activeElement !== commentInput) {
       closeModal();
     }
   }
@@ -40,7 +42,7 @@ function onEsc (evt) {
 /**
  * Функция отвечающая за все действия при закрытии окна. Запись такая потому что нам ее нужно вызывать выше.
  */
-function closeModal () {
+function closeModal() {
   overlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onEsc);
@@ -99,10 +101,84 @@ pristine.addValidator(
 /**
  * Обработчик отправки формы с условием (условия выше).
  */
-form.addEventListener('submit', (evt) => {
-  const isValid = pristine.validate();
 
-  if (!isValid) {
-    evt.preventDefault();
+form.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+  if (isValid) {
+    const formData = new FormData(form);
+    submitButton.disabled = true;
+    sendData(formData)
+      .then(() => {
+        closeModal();
+        showSuccessMessage();
+        // по кнопке удаляем сообщение
+      })
+      .catch(() => {
+        showErrorMessage();
+      })
+      .finally(() => {
+        submitButton.disabled = false;
+      });
   }
 });
+
+function showErrorMessage() {
+  const errorMessage = errorTemplate.cloneNode(true);
+  const errorElement = errorMessage.querySelector('.error');
+  const errorButton = errorMessage.querySelector('.error__button');
+
+  document.body.append(errorMessage);
+
+  function closeErrorMessage() {
+    errorElement.remove();
+    document.removeEventListener('keydown', onEscError);
+  }
+
+  function onEscError(evt) {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      closeErrorMessage();
+    }
+  }
+
+  document.addEventListener('keydown', onEscError);
+  errorButton.addEventListener('click', closeErrorMessage);
+
+  errorElement.addEventListener('click', (evt) => {
+    if (evt.target === errorElement) {
+      closeErrorMessage();
+    }
+  });
+}
+
+
+function showSuccessMessage() {
+  const successMessage = successTemplate.cloneNode(true);
+  const successElement = successMessage.querySelector('.success');
+  const successButton = successMessage.querySelector('.success__button');
+
+  document.body.append(successMessage);
+
+  function closeSuccessMessage() {
+    successElement.remove();
+    document.removeEventListener('keydown', onEscSuccess);
+  }
+
+  function onEscSuccess(evt) {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      closeSuccessMessage();
+    }
+  }
+
+  document.addEventListener('keydown', onEscSuccess);
+  successButton.addEventListener('click', closeSuccessMessage);
+
+  successElement.addEventListener('click', (evt) => {
+    if (evt.target === successElement) {
+      closeSuccessMessage();
+    }
+  });
+}
+
