@@ -5,8 +5,7 @@ import { renderMiniatures } from './widgetMiniatures.js';
 import { getPictures } from './api.js';
 import { setPictures } from './imageModal.js';
 
-// Обработка данных с сервера
-
+//** Обработка данных с сервера */
 getPictures()
   .then((pictures) => {
     setPictures(pictures);
