@@ -1,18 +1,25 @@
 const smallerButton = document.querySelector('.scale__control--smaller');
 const biggerButton = document.querySelector('.scale__control--bigger');
-const sizeInput = document.querySelector('.scale__control--value');
-const preview = document.querySelector('.img-upload__preview img');
+const scaleControlValue = document.querySelector('.scale__control--value');
+const previewImage = document.querySelector('.img-upload__preview img');
+
 const STEP_SCALE = 25;
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 
+const effectsList = document.querySelector('.effects__list');
+const sliderElement = document.querySelector('.effect-level__slider');
+const effectLevelValue = document.querySelector('.effect-level__value');
+const effectLevelContainer = document.querySelector('.img-upload__effect-level');
+
+// Масштаб.
 setScale(MAX_SCALE); // Значение по умолчанию.
 
 /**
  * Обработчик для кнопки уменьшения.
  */
 smallerButton.addEventListener('click', () => {
-  const currentValue = parseInt(sizeInput.value, 10);
+  const currentValue = parseInt(scaleControlValue.value, 10);
   const newValue = Math.max(currentValue - STEP_SCALE, MIN_SCALE);
   setScale(newValue);
 
@@ -22,7 +29,7 @@ smallerButton.addEventListener('click', () => {
  * Обработчик для кнопки увеличения.
  */
 biggerButton.addEventListener('click', () => {
-  const currentValue = parseInt(sizeInput.value, 10);
+  const currentValue = parseInt(scaleControlValue.value, 10);
   const newValue = Math.min(currentValue + STEP_SCALE, MAX_SCALE);
   setScale(newValue);
 });
@@ -32,18 +39,12 @@ biggerButton.addEventListener('click', () => {
  * @param {Number} newValue
  */
 function setScale(newValue) {
-  const fraction = (newValue) / 100;
-  sizeInput.value = `${newValue}%`;
-  preview.style.transform = `scale(${fraction})`;
+  const fraction = newValue / 100;
+  scaleControlValue.value = `${newValue}%`;
+  previewImage.style.transform = `scale(${fraction})`;
 }
 
-// Делаем фильтры
-
-const effectsList = document.querySelector('.effects__list');
-const sliderElement = document.querySelector('.effect-level__slider');
-const effectValue = document.querySelector('.effect-level__value');
-const effectLevel = document.querySelector('.img-upload__effect-level');
-
+// Фильтры.
 const effects = {
   none: {
     range: { min: 0, max: 100 },
@@ -101,7 +102,7 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-effectLevel.classList.add('hidden');
+effectLevelContainer.classList.add('hidden');
 
 /**
  * Применяем фильтр и записывает значение.
@@ -112,13 +113,13 @@ function applyEffect() {
   const effectSettings = effects[currentEffect];
 
   if (currentEffect === 'none') { // Фильтр убирается, слайдер скрывается.
-    preview.style.filter = 'none';
-    effectValue.value = '';
+    previewImage.style.filter = 'none';
+    effectLevelValue.value = '';
     return;
   }
 
-  preview.style.filter = `${effectSettings.style}(${sliderValue}${effectSettings.unit})`;
-  effectValue.value = sliderValue;
+  previewImage.style.filter = `${effectSettings.style}(${sliderValue}${effectSettings.unit})`;
+  effectLevelValue.value = sliderValue;
 }
 
 /**
@@ -133,11 +134,7 @@ function updateSlider() {
     step: effectSettings.step,
   });
 
-  if (currentEffect === 'none') {
-    effectLevel.classList.add('hidden');
-  } else {
-    effectLevel.classList.remove('hidden');
-  }
+  effectLevelContainer.classList.toggle('hidden', currentEffect === 'none');
 }
 
 effectsList.addEventListener('change', (evt) => {
@@ -153,3 +150,24 @@ effectsList.addEventListener('change', (evt) => {
 sliderElement.noUiSlider.on('update', () => {
   applyEffect();
 });
+
+function resetEditorState() {
+  currentEffect = 'none';
+
+  setScale(MAX_SCALE);
+  previewImage.style.filter = 'none';
+  effectLevelValue.value = '';
+
+  sliderElement.noUiSlider.updateOptions({
+    range: effects.none.range,
+    start: effects.none.start,
+    step: effects.none.step,
+  });
+
+  sliderElement.noUiSlider.set(effects.none.start);
+  effectLevelContainer.classList.add('hidden');
+
+  document.querySelector('#effect-none').checked = true;
+}
+
+export { resetEditorState };
