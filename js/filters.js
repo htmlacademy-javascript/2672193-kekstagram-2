@@ -39,7 +39,7 @@ biggerButton.addEventListener('click', () => {
  * @param {Number} newValue
  */
 function setScale(newValue) {
-  const fraction = (newValue) / 100;
+  const fraction = newValue / 100;
   scaleControlValue.value = `${newValue}%`;
   previewImage.style.transform = `scale(${fraction})`;
 }
@@ -134,11 +134,7 @@ function updateSlider() {
     step: effectSettings.step,
   });
 
-  if (currentEffect === 'none') {
-    effectLevelContainer.classList.add('hidden');
-  } else {
-    effectLevelContainer.classList.remove('hidden');
-  }
+  effectLevelContainer.classList.toggle('hidden', currentEffect === 'none');
 }
 
 effectsList.addEventListener('change', (evt) => {

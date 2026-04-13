@@ -121,6 +121,7 @@ uploadForm.addEventListener('submit', (evt) => {
   if (isValid) {
     const formData = new FormData(uploadForm);
     submitButton.disabled = true;
+
     sendData(formData)
       .then(() => {
         closeUploadModal();
