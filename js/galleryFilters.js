@@ -33,15 +33,21 @@ const initializeFilters = (pictures) => {
     const button = evt.target.closest('.img-filters__button');
     button.classList.add('img-filters__button--active');
 
-    if (button.id === 'filter-default') {
-      debouncedRenderMiniatures(pictures);
-    } else if (button.id === 'filter-random') {
-      debouncedRenderMiniatures(getRandomPictures(pictures));
-    } else {
-      debouncedRenderMiniatures(getDiscussedPictures(pictures));
+    switch (button.id) {
+      case 'filter-default':
+        debouncedRenderMiniatures(pictures);
+        break;
+
+      case 'filter-random':
+        debouncedRenderMiniatures(getRandomPictures(pictures));
+        break;
+
+      case 'filter-discussed':
+        debouncedRenderMiniatures(getDiscussedPictures(pictures));
+        break;
     }
-  }
-  );
+  });
 };
 
 export { initializeFilters };
+
