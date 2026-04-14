@@ -1,6 +1,6 @@
 import { isEscapeKey } from './utils.js';
 import { sendData } from './api.js';
-import { resetEditorState } from './filters.js';
+import { resetEditorState } from './imageFilters.js';
 
 // Элементы формы загрузки изображения
 const uploadOverlay = document.querySelector('.img-upload__overlay');

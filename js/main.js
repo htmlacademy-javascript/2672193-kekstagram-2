@@ -1,15 +1,17 @@
 import './utils.js';
 import './validation.js';
-import './filters.js';
+import './imageFilters.js';
 import { renderMiniatures } from './widgetMiniatures.js';
 import { getPictures } from './api.js';
 import { setPictures } from './imageModal.js';
+import { initializeFilters } from './galleryFilters.js';
 
 //** Обработка данных с сервера */
 getPictures()
   .then((pictures) => {
     setPictures(pictures);
     renderMiniatures(pictures);
+    initializeFilters(pictures);
   })
   .catch(() => {
     showDataErrorMessage();
