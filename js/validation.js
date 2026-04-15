@@ -1,6 +1,6 @@
 import { isEscapeKey } from './utils.js';
 import { sendData } from './api.js';
-import { resetEditorState } from './filters.js';
+import { resetEditorState } from './imageFilters.js';
 
 // Элементы формы загрузки изображения
 const uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -17,10 +17,24 @@ const successTemplate = document.querySelector('#success').content;
 // Кнопка отправки
 const submitButton = uploadForm.querySelector('.img-upload__submit');
 
+const previewImage = document.querySelector('.img-upload__preview img');
+const effectPreviews = document.querySelectorAll('.effects__preview');
 /**
  * Открывет форму редактирования и модельное окно при загрузке файла.
  */
 uploadInput.addEventListener('change', () => {
+  const file = uploadInput.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  const url = URL.createObjectURL(file);
+  previewImage.src = url;
+
+  effectPreviews.forEach((preview) => {
+    preview.style.backgroundImage = `url(${url})`;
+  });
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
 
