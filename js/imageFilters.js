@@ -119,7 +119,7 @@ function applyEffect() {
   }
 
   previewImage.style.filter = `${effectSettings.style}(${sliderValue}${effectSettings.unit})`;
-  effectLevelValue.value = sliderValue;
+  effectLevelValue.value = Number(sliderValue);
 }
 
 /**

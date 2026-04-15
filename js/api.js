@@ -14,11 +14,9 @@ const sendData = (body) => fetch('https://31.javascript.htmlacademy.pro/kekstagr
   body,
 })
   .then((response) => {
-    if (response.ok) {
-      return response;
+    if (!response.ok) {
+      throw new Error('Не удалось отправить данные');
     }
-
-    throw new Error('Не удалось отправить данные');
   });
 
 export { getPictures, sendData };
