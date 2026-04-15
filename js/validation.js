@@ -66,6 +66,13 @@ function onFormEsc(evt) {
     }
   }
 }
+
+const pristine = new Pristine(uploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'pristine-error'
+});
+
 /**
  * Полностью закрывает форму и сбрасывает фильтры, форму
  */
@@ -74,12 +81,11 @@ function closeUploadModal() {
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onFormEsc);
   uploadForm.reset();
+  pristine.reset();
+  document.querySelectorAll('.pristine-error').forEach((element) => element.remove());
   resetEditorState();
   uploadInput.value = '';
 }
-
-
-const pristine = new Pristine(uploadForm);
 
 /**
  * Условия по хэштегам.

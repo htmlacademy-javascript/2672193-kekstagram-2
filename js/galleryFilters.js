@@ -1,4 +1,4 @@
-import { renderMiniatures } from './widgetMiniatures';
+import { renderMiniatures } from './widgetMiniatures.js';
 import { debounce } from './utils.js';
 
 const imgFilters = document.querySelector('.img-filters');
@@ -20,34 +20,38 @@ const getDiscussedPictures = (pictures) =>
 
 const initializeFilters = (pictures) => {
   const debouncedRenderMiniatures = debounce(renderMiniatures, 500);
+
   imgFilters.classList.remove('img-filters--inactive');
+
   imgFiltersForm.addEventListener('click', (evt) => {
-    if (!evt.target.closest('.img-filters__button')) {
+    const button = evt.target.closest('.img-filters__button');
+
+    if (!button) {
       return;
     }
-    const activeButton = document.querySelector('.img-filters__button--active');
+
+    evt.preventDefault();
+
+    const activeButton = imgFiltersForm.querySelector('.img-filters__button--active');
 
     if (activeButton) {
       activeButton.classList.remove('img-filters__button--active');
     }
-    const button = evt.target.closest('.img-filters__button');
+
     button.classList.add('img-filters__button--active');
 
-    switch (button.id) {
-      case 'filter-default':
-        debouncedRenderMiniatures(pictures);
-        break;
+    if (button.id === 'filter-default') {
+      debouncedRenderMiniatures(pictures);
+    }
 
-      case 'filter-random':
-        debouncedRenderMiniatures(getRandomPictures(pictures));
-        break;
+    if (button.id === 'filter-random') {
+      debouncedRenderMiniatures(getRandomPictures(pictures));
+    }
 
-      case 'filter-discussed':
-        debouncedRenderMiniatures(getDiscussedPictures(pictures));
-        break;
+    if (button.id === 'filter-discussed') {
+      debouncedRenderMiniatures(getDiscussedPictures(pictures));
     }
   });
 };
-
 export { initializeFilters };
 
