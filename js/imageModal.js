@@ -101,13 +101,27 @@ const renderComments = () => {
 };
 
 /**
- * Закрытое окно
+ * Обработчик события нажатия на кнопку показать еще.
+ */
+const onCommentsLoaderClick = () => {
+  renderComments();
+};
+
+/**
+ * Закрытое окно, код еще переиспользуется при нажатии на esc, поэтому сделать обработчик сразу не можем.
  */
 const closeBigPicture = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onDocumentKeydown);
+};
+
+/**
+ * Обработчик события нажатия на крестик
+ */
+const onCloseButtonClick = () => {
+  closeBigPicture();
 };
 
 /**
@@ -146,9 +160,10 @@ const openBigPicture = ({ url, description, likes, comments }) => {
 };
 
 /**
- *
+ * Обработчик клика по контейнеру миниатюр.
+ * @param {Event} evt
  */
-pictureContainer.addEventListener('click', (evt) => {
+const onPictureContainerClick = (evt) => {
   const picture = evt.target.closest('.picture'); // Клик на элменте у которого у самого или у родителя есть .picture.
   // Используем делегирование, чтобы не вешать обработчик на каждую картинку.
   // Это уменьшает количество обработчиков и улучшает производительность.
@@ -161,9 +176,10 @@ pictureContainer.addEventListener('click', (evt) => {
 
   const post = pictures[picture.dataset.index];
   openBigPicture(post);
-});
+};
 
-closeButton.addEventListener('click', closeBigPicture);
-commentsLoader.addEventListener('click', renderComments);
+pictureContainer.addEventListener('click', onPictureContainerClick);
+closeButton.addEventListener('click', onCloseButtonClick);
+commentsLoader.addEventListener('click', onCommentsLoaderClick);
 
 export { openBigPicture, setPictures };
