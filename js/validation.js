@@ -44,7 +44,11 @@ uploadInput.addEventListener('change', () => {
 /**
  * Закрывает форму редактирования и модельное окно при нажатии на крестик.
  */
-closeButton.addEventListener('click', closeUploadModal);
+const onCloseButtonClick = () => {
+  closeUploadModal();
+};
+
+closeButton.addEventListener('click', onCloseButtonClick);
 
 // Так как появился второй обработчик на esc нужна дополнительная проверка на что сработает обработчик на модальное окно или сообщение ошибки/успеха.
 function isMessageOpen() {
@@ -179,14 +183,20 @@ function showErrorMessage() {
     }
   }
 
-  document.addEventListener('keydown', onEscError);
-  errorButton.addEventListener('click', closeErrorMessage);
+  const onErrorButtonClick = () => {
+    closeErrorMessage();
+  };
 
-  errorElement.addEventListener('click', (evt) => {
+  document.addEventListener('keydown', onEscError);
+  errorButton.addEventListener('click', onErrorButtonClick);
+
+  const onErrorElementClick = (evt) => {
     if (evt.target === errorElement) {
       closeErrorMessage();
     }
-  });
+  };
+
+  errorElement.addEventListener('click', onErrorElementClick);
 }
 
 /**
@@ -211,12 +221,18 @@ function showSuccessMessage() {
     }
   }
 
-  document.addEventListener('keydown', onEscSuccess);
-  successButton.addEventListener('click', closeSuccessMessage);
+  const onSuccessButtonClick = () => {
+    closeSuccessMessage();
+  };
 
-  successElement.addEventListener('click', (evt) => {
+  document.addEventListener('keydown', onEscSuccess);
+  successButton.addEventListener('click', onSuccessButtonClick);
+
+  const onSuccessElementClick = (evt) => {
     if (evt.target === successElement) {
       closeSuccessMessage();
     }
-  });
+  };
+
+  successElement.addEventListener('click', onSuccessElementClick);
 }

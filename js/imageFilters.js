@@ -1,12 +1,11 @@
-const smallerButton = document.querySelector('.scale__control--smaller');
-const biggerButton = document.querySelector('.scale__control--bigger');
-const scaleControlValue = document.querySelector('.scale__control--value');
-const previewImage = document.querySelector('.img-upload__preview img');
-
 const STEP_SCALE = 25;
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 
+const smallerButton = document.querySelector('.scale__control--smaller');
+const biggerButton = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
+const previewImage = document.querySelector('.img-upload__preview img');
 const effectsList = document.querySelector('.effects__list');
 const sliderElement = document.querySelector('.effect-level__slider');
 const effectLevelValue = document.querySelector('.effect-level__value');

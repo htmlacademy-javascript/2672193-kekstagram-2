@@ -1,9 +1,9 @@
 import { renderMiniatures } from './widgetMiniatures.js';
 import { debounce } from './utils.js';
 
+const RANDOM_PHOTOS_COUNT = 10;
 const imgFilters = document.querySelector('.img-filters');
 const imgFiltersForm = document.querySelector('.img-filters__form');
-const RANDOM_PHOTOS_COUNT = 10;
 
 // Массив фотографий по умолчанию и есть изначальный массив (filter-default)
 // Массива случайных фотографий (filter-random)
